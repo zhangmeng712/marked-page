@@ -1,0 +1,28 @@
+{
+  "name": "marked-page",
+  "version": "0.0.1",
+  "homepage": "https://github.com/zhangmeng712/marked-page",
+  "authors": [
+    "zhangmeng <zhangmeng712@gmail.com>"
+  ],
+  "description": "",
+  "keywords": [
+    "polymer",
+    "marked",
+    "highlight"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.4",
+    "core-ajax": "Polymer/core-ajax#~0.5.5",
+    "marked": "~0.3.3",
+    "prism": ""
+  }
+}

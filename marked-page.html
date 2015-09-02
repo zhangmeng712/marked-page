@@ -1,0 +1,62 @@
+<link rel="import" href="bower_components/polymer/polymer.html" >
+<link rel="import" href="bower_components/core-ajax/core-ajax.html" >
+<script src='bower_components/marked/marked.min.js'></script>
+<script src="bower_components/prism/prism.js"></script>
+<script src="assets/toc.js"></script>
+<polymer-element name="marked-page" attributes="docUrl,docContent">
+    <template>
+        <link rel="stylesheet" href="themes/marked-github.css">
+        <link rel="stylesheet" href="bower_components/prism/themes/prism.css">
+        <core-ajax id="coreAjax" auto url="{{docUrl}}"></core-ajax>
+        <div id="result" class="markdown-body md-editor"></div>
+    </template>
+    <script>
+        Polymer({
+            publish: {
+                docUrl: ''
+            },
+            docContent: '',
+            attached: function () {
+
+            },
+            markedContent: function (content) {
+                var markedHtml = '';
+                if (marked) {
+                    markedHtml = marked(content);
+                }
+                this.docContent = markedHtml;
+            },
+            highlight: function () {
+                var codes = this.shadowRoot.querySelectorAll('code');
+                [].forEach.call(codes, function(code) {
+                    Prism.highlightElement(code);
+                });
+            },
+            docContentChanged: function (oldVal, newVal) {
+                var el = this.$.result;
+                if (newVal) {
+                    this.injectBoundHTML(this.docContent, el);
+                } else {
+                    this.injectBoundHTML('', el);
+                }
+                //调用highlight
+                this.highlight();
+                this.generateToc();
+            },
+            generateToc: function () {
+                new Toc(this,'result');
+            },
+            //调用主题
+            ready: function () {
+                //调用ajax获得内容然后调用marked生成结果
+                //根据结果生成目录预览
+                var self = this;
+                var ajax = this.$.coreAjax;
+                ajax.addEventListener("core-response", function (e) {
+                    var content = e.detail.response || '';
+                    self.markedContent(content);
+                });
+            }
+        });
+    </script>
+</polymer-element>
